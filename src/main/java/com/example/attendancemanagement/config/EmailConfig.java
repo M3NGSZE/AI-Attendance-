@@ -14,7 +14,6 @@ public class EmailConfig {
     
     // SMTP Configuration
     private Smtp smtp = new Smtp();
-    hello
     
     // SendGrid Configuration
     private SendGrid sendGrid = new SendGrid();
