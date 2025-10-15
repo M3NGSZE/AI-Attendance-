@@ -42,6 +42,24 @@ Authorization: Bearer <your-jwt-token>
 
 **Note:** If no date is provided, it defaults to the current date.
 
+### 5. Test Check-in (No Time Validation)
+
+```http
+POST /api/attendance/test/checkin
+Authorization: Bearer <your-jwt-token>
+```
+
+**Note:** This endpoint is for testing purposes and bypasses all time restriction validations. Use this to test check-in functionality without worrying about time constraints.
+
+### 6. Test Check-out (No Time Validation)
+
+```http
+POST /api/attendance/test/checkout
+Authorization: Bearer <your-jwt-token>
+```
+
+**Note:** This endpoint is for testing purposes and bypasses all time restriction validations. Use this to test check-out functionality without worrying about time constraints.
+
 ## Usage Examples
 
 ### Example 1: Check-in
@@ -97,6 +115,20 @@ curl -X GET "http://localhost:8080/api/attendance/date?date=2024-01-15" \
 
 ```bash
 curl -X GET "http://localhost:8080/api/attendance/date" \
+  -H "Authorization: Bearer <your-jwt-token>"
+```
+
+### Example 9: Test Check-in (No Time Validation)
+
+```bash
+curl -X POST "http://localhost:8080/api/attendance/test/checkin" \
+  -H "Authorization: Bearer <your-jwt-token>"
+```
+
+### Example 10: Test Check-out (No Time Validation)
+
+```bash
+curl -X POST "http://localhost:8080/api/attendance/test/checkout" \
   -H "Authorization: Bearer <your-jwt-token>"
 ```
 

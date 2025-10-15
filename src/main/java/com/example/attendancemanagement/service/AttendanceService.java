@@ -399,5 +399,115 @@ public class AttendanceService {
         
         return record;
     }
+
+    // Test methods without time validation restrictions
+    public CheckInResponse testCheckIn(UUID userId) {
+        // Validate user exists
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        // Get current time in Jakarta timezone
+        ZonedDateTime jakartaNow = ZonedDateTime.now(JAKARTA_ZONE);
+        LocalDate today = jakartaNow.toLocalDate();
+        LocalDateTime now = jakartaNow.toLocalDateTime();
+        LocalTime currentTime = jakartaNow.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
+
+        System.out.println("Test Check-in - Jakarta time: " + jakartaNow);
+        System.out.println("Test Check-in - Today: " + today);
+        System.out.println("Test Check-in - Current time (truncated): " + currentTime);
+
+        // Check if already checked in today
+        Optional<Attendance> existingAttendance = attendanceRepository
+                .findByUserUserIdAndAttendanceDate(userId, today);
+
+        if (existingAttendance.isPresent()) {
+            throw new BadRequestException("You have already checked in today");
+        }
+
+        // Skip time validation for testing - validateCheckInTime(userId, currentTime, today);
+
+        // Determine check-in status based on time
+        CheckInStatus checkinStatus = determineCheckInStatus(currentTime);
+        
+        // Determine date status based on current date
+        DateStatus dateStatus = determineDateStatus(today);
+
+        // Create attendance record
+        Attendance attendance = new Attendance();
+        attendance.setUser(user);
+        attendance.setCheckIn(currentTime);
+        attendance.setCheckinStatus(checkinStatus);
+        attendance.setDateStatus(dateStatus);
+
+        Attendance savedAttendance = attendanceRepository.save(attendance);
+
+        // Create response
+        CheckInResponse response = new CheckInResponse();
+        response.setAttendanceId(savedAttendance.getAttendanceId().toString());
+        response.setUserId(userId.toString());
+        response.setAttendanceDate(today.format(DATE_FORMATTER));
+        response.setCheckInTime(now.format(TIME_FORMATTER));
+        response.setCheckInStatus(checkinStatus.name());
+        
+        // Set appropriate message
+        String message = generateCheckInMessage(checkinStatus, currentTime);
+        response.setMessage(message + " (Test mode - no time validation)");
+
+        return response;
+    }
+
+    public CheckOutResponse testCheckOut(UUID userId) {
+        // Validate user exists
+        userRepository.findById(userId)
+                .orElseThrow(() -> new BadRequestException("User not found"));
+
+        // Get current time in Jakarta timezone
+        ZonedDateTime jakartaNow = ZonedDateTime.now(JAKARTA_ZONE);
+        LocalDate today = jakartaNow.toLocalDate();
+        LocalTime currentTime = jakartaNow.toLocalTime().truncatedTo(ChronoUnit.SECONDS);
+
+        System.out.println("Test Checkout - Jakarta time: " + jakartaNow);
+        System.out.println("Test Checkout - Today: " + today);
+        System.out.println("Test Checkout - Current time: " + currentTime);
+
+        // Find today's attendance record
+        Attendance attendance = attendanceRepository
+                .findByUserUserIdAndAttendanceDate(userId, today)
+                .orElseThrow(() -> new BadRequestException("You must check in first before checking out"));
+
+        // Check if already checked out
+        if (attendance.getCheckoutOut() != null) {
+            throw new BadRequestException("You have already checked out today");
+        }
+
+        // Skip time validation for testing - validateCheckOutTime(userId, currentTime, today);
+
+        // Determine checkout status based on date status
+        DateStatus dateStatus = attendance.getDateStatus();
+        CheckOutStatus checkoutStatus = determineCheckOutStatus(dateStatus, currentTime);
+
+        // Update attendance record
+        attendance.setCheckoutOut(currentTime);
+        attendance.setCheckoutStatus(checkoutStatus);
+
+        Attendance savedAttendance = attendanceRepository.save(attendance);
+
+        // Create response
+        CheckOutResponse response = new CheckOutResponse();
+        response.setAttendanceId(savedAttendance.getAttendanceId().toString());
+        response.setUserId(userId.toString());
+        response.setAttendanceDate(today.format(DATE_FORMATTER));
+        response.setCheckInTime(savedAttendance.getCheckIn().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        response.setCheckOutTime(currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        response.setCheckInStatus(savedAttendance.getCheckinStatus().name());
+        response.setCheckOutStatus(checkoutStatus.name());
+        response.setDateStatus(dateStatus.name());
+        
+        // Set appropriate message
+        String message = generateCheckOutMessage(checkoutStatus, currentTime, dateStatus);
+        response.setMessage(message + " (Test mode - no time validation)");
+
+        return response;
+    }
     
 }
