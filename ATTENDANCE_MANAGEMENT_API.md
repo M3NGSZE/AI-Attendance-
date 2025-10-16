@@ -45,7 +45,7 @@ Authorization: Bearer <your-jwt-token>
 ### 5. Test Check-in (No Time Validation)
 
 ```http
-POST /api/attendance/test/checkin
+POST /api/test/checkin
 Authorization: Bearer <your-jwt-token>
 ```
 
@@ -54,7 +54,7 @@ Authorization: Bearer <your-jwt-token>
 ### 6. Test Check-out (No Time Validation)
 
 ```http
-POST /api/attendance/test/checkout
+POST /api/test/checkout
 Authorization: Bearer <your-jwt-token>
 ```
 
@@ -121,14 +121,14 @@ curl -X GET "http://localhost:8080/api/attendance/date" \
 ### Example 9: Test Check-in (No Time Validation)
 
 ```bash
-curl -X POST "http://localhost:8080/api/attendance/test/checkin" \
+curl -X POST "http://localhost:8080/api/test/checkin" \
   -H "Authorization: Bearer <your-jwt-token>"
 ```
 
 ### Example 10: Test Check-out (No Time Validation)
 
 ```bash
-curl -X POST "http://localhost:8080/api/attendance/test/checkout" \
+curl -X POST "http://localhost:8080/api/test/checkout" \
   -H "Authorization: Bearer <your-jwt-token>"
 ```
 
