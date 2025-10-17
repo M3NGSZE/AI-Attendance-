@@ -41,11 +41,10 @@ public class Generation extends BaseEntity {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
     
-    @Column(name = "lat")
-    private Double lat;
-    
-    @Column(name = "lng")
-    private Double lng;
+    @JsonProperty("center_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "center_id", nullable = false)
+    private Center center;
     
     // One-to-many relationship with Class
     @OneToMany(mappedBy = "generation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

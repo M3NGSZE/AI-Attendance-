@@ -24,6 +24,10 @@ public class Class extends BaseEntity {
     @Column(name = "class_id", updatable = false, nullable = false)
     private UUID classId;
     
+    @JsonProperty("class_name")
+    @Column(name = "class_name", length = 100, nullable = false)
+    private String className;
+    
     @JsonProperty("generation_id")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "generation_id", nullable = false)
