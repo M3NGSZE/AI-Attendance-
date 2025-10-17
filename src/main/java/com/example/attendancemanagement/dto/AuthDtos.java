@@ -127,24 +127,6 @@ public class AuthDtos {
     public static class CheckInResponse {
         @JsonProperty("attendance_id")
         private String attendanceId;
-        @JsonProperty("user_id")
-        private String userId;
-        @JsonProperty("attendance_date")
-        private String attendanceDate;
-        @JsonProperty("check_in_time")
-        private String checkInTime;
-        @JsonProperty("checkin_status")
-        private String checkInStatus;
-        @JsonProperty("message")
-        private String message;
-    }
-
-    @Data
-    public static class CheckOutResponse {
-        @JsonProperty("attendance_id")
-        private String attendanceId;
-        @JsonProperty("user_id")
-        private String userId;
         @JsonProperty("attendance_date")
         private String attendanceDate;
         @JsonProperty("check_in_time")
@@ -157,8 +139,32 @@ public class AuthDtos {
         private String checkOutStatus;
         @JsonProperty("date_status")
         private String dateStatus;
-        @JsonProperty("message")
-        private String message;
+        @JsonProperty("checkin_datetime")
+        private String checkInDateTime;
+        @JsonProperty("checkout_datetime")
+        private String checkOutDateTime;
+    }
+
+    @Data
+    public static class CheckOutResponse {
+        @JsonProperty("attendance_id")
+        private String attendanceId;
+        @JsonProperty("attendance_date")
+        private String attendanceDate;
+        @JsonProperty("check_in_time")
+        private String checkInTime;
+        @JsonProperty("check_out_time")
+        private String checkOutTime;
+        @JsonProperty("checkin_status")
+        private String checkInStatus;
+        @JsonProperty("checkout_status")
+        private String checkOutStatus;
+        @JsonProperty("date_status")
+        private String dateStatus;
+        @JsonProperty("checkin_datetime")
+        private String checkInDateTime;
+        @JsonProperty("checkout_datetime")
+        private String checkOutDateTime;
     }
 
 

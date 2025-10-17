@@ -6,6 +6,7 @@ import com.example.attendancemanagement.dto.AuthDtos.CheckOutResponse;
 import com.example.attendancemanagement.service.AttendanceService;
 import com.example.attendancemanagement.util.TokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequestMapping("/api/test")
 @RequiredArgsConstructor
 @Slf4j
+@SecurityRequirement(name = "bearerAuth")
 public class TestController {
 
     private final AttendanceService attendanceService;

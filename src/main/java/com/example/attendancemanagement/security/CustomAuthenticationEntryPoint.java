@@ -27,8 +27,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", Instant.now().toString());
-        body.put("code", "UNAUTHORIZED");
-        body.put("message", "Authentication required");
+        body.put("code", "MISSING_TOKEN");
+        body.put("message", "Authorization header is required");
         body.put("details", "Please provide a valid Authorization header with Bearer token");
         
         ObjectMapper mapper = new ObjectMapper();

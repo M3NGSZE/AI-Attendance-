@@ -93,14 +93,14 @@ public class AttendanceService {
         // Create response
         CheckInResponse response = new CheckInResponse();
         response.setAttendanceId(savedAttendance.getAttendanceId().toString());
-        response.setUserId(userId.toString());
         response.setAttendanceDate(today.format(DATE_FORMATTER));
-        response.setCheckInTime(now.format(TIME_FORMATTER));
+        response.setCheckInTime(currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        response.setCheckOutTime(null); // No checkout time for check-in
         response.setCheckInStatus(checkinStatus.name());
-        
-        // Set appropriate message
-        String message = generateCheckInMessage(checkinStatus, currentTime);
-        response.setMessage(message);
+        response.setCheckOutStatus(null); // No checkout status for check-in
+        response.setDateStatus(dateStatus.name());
+        response.setCheckInDateTime(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.setCheckOutDateTime(null); // No checkout datetime for check-in
 
         return response;
     }
@@ -145,17 +145,14 @@ public class AttendanceService {
         // Create response
         CheckOutResponse response = new CheckOutResponse();
         response.setAttendanceId(savedAttendance.getAttendanceId().toString());
-        response.setUserId(userId.toString());
         response.setAttendanceDate(today.format(DATE_FORMATTER));
         response.setCheckInTime(savedAttendance.getCheckIn().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         response.setCheckOutTime(currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         response.setCheckInStatus(savedAttendance.getCheckinStatus().name());
         response.setCheckOutStatus(checkoutStatus.name());
         response.setDateStatus(dateStatus.name());
-        
-        // Set appropriate message
-        String message = generateCheckOutMessage(checkoutStatus, currentTime, dateStatus);
-        response.setMessage(message);
+        response.setCheckInDateTime(savedAttendance.getCheckIn().atDate(today).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.setCheckOutDateTime(currentTime.atDate(today).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         return response;
     }
@@ -444,14 +441,14 @@ public class AttendanceService {
         // Create response
         CheckInResponse response = new CheckInResponse();
         response.setAttendanceId(savedAttendance.getAttendanceId().toString());
-        response.setUserId(userId.toString());
         response.setAttendanceDate(today.format(DATE_FORMATTER));
-        response.setCheckInTime(now.format(TIME_FORMATTER));
+        response.setCheckInTime(currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        response.setCheckOutTime(null); // No checkout time for check-in
         response.setCheckInStatus(checkinStatus.name());
-        
-        // Set appropriate message
-        String message = generateCheckInMessage(checkinStatus, currentTime);
-        response.setMessage(message + " (Test mode - no time validation)");
+        response.setCheckOutStatus(null); // No checkout status for check-in
+        response.setDateStatus(dateStatus.name());
+        response.setCheckInDateTime(now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.setCheckOutDateTime(null); // No checkout datetime for check-in
 
         return response;
     }
@@ -495,17 +492,14 @@ public class AttendanceService {
         // Create response
         CheckOutResponse response = new CheckOutResponse();
         response.setAttendanceId(savedAttendance.getAttendanceId().toString());
-        response.setUserId(userId.toString());
         response.setAttendanceDate(today.format(DATE_FORMATTER));
         response.setCheckInTime(savedAttendance.getCheckIn().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         response.setCheckOutTime(currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         response.setCheckInStatus(savedAttendance.getCheckinStatus().name());
         response.setCheckOutStatus(checkoutStatus.name());
         response.setDateStatus(dateStatus.name());
-        
-        // Set appropriate message
-        String message = generateCheckOutMessage(checkoutStatus, currentTime, dateStatus);
-        response.setMessage(message + " (Test mode - no time validation)");
+        response.setCheckInDateTime(savedAttendance.getCheckIn().atDate(today).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.setCheckOutDateTime(currentTime.atDate(today).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 
         return response;
     }

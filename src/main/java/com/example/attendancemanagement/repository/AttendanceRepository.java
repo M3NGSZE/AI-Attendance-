@@ -51,6 +51,41 @@ public interface AttendanceRepository extends JpaRepository<Attendance, UUID> {
     List<Attendance> findByCheckinStatusOrderByCheckInDesc(CheckInStatus checkinStatus);
     
     /**
+     * Count attendance records by check-in status within date range
+     */
+    @Query("SELECT COUNT(a) FROM Attendance a WHERE a.checkinStatus = :checkinStatus " +
+           "AND DATE(a.createdAt) BETWEEN :startDate AND :endDate")
+    long countByCheckinStatusAndDateRange(@Param("checkinStatus") CheckInStatus checkinStatus, 
+                                         @Param("startDate") LocalDate startDate, 
+                                         @Param("endDate") LocalDate endDate);
+    
+    /**
+     * Count total attendance records within date range
+     */
+    @Query("SELECT COUNT(a) FROM Attendance a WHERE DATE(a.createdAt) BETWEEN :startDate AND :endDate")
+    long countByDateRange(@Param("startDate") LocalDate startDate, 
+                         @Param("endDate") LocalDate endDate);
+    
+    /**
+     * Count distinct days by check-in status within date range
+     */
+    @Query("SELECT COUNT(DISTINCT DATE(a.createdAt)) FROM Attendance a WHERE a.checkinStatus = :checkinStatus " +
+           "AND DATE(a.createdAt) BETWEEN :startDate AND :endDate")
+    long countDistinctDaysByCheckinStatusAndDateRange(@Param("checkinStatus") CheckInStatus checkinStatus, 
+                                                     @Param("startDate") LocalDate startDate, 
+                                                     @Param("endDate") LocalDate endDate);
+    
+    /**
+     * Count distinct days by user and check-in status within date range
+     */
+    @Query("SELECT COUNT(DISTINCT DATE(a.createdAt)) FROM Attendance a WHERE a.user.userId = :userId " +
+           "AND a.checkinStatus = :checkinStatus AND DATE(a.createdAt) BETWEEN :startDate AND :endDate")
+    long countDistinctDaysByUserAndCheckinStatusAndDateRange(@Param("userId") UUID userId,
+                                                           @Param("checkinStatus") CheckInStatus checkinStatus, 
+                                                           @Param("startDate") LocalDate startDate, 
+                                                           @Param("endDate") LocalDate endDate);
+    
+    /**
      * Find attendance records by check-out status
      */
     List<Attendance> findByCheckoutStatusOrderByCheckoutOutDesc(CheckOutStatus checkoutStatus);
