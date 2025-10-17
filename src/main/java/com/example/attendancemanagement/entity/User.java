@@ -62,4 +62,8 @@ public class User extends BaseEntity {
     // One-to-many relationship with Permission
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Permission> permissions;
+    
+    // Many-to-many relationship with Class
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<Class> classes;
 }
